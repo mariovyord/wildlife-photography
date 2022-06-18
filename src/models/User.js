@@ -5,18 +5,39 @@ const userSchema = new mongoose.Schema({
 	first_name: {
 		type: String,
 		required: true,
+		minlength: 3,
+		validate: {
+			validator: function (v) {
+				return /[a-zA-Z]+/.test(v);
+			},
+			message: props => `${props.value} is not a valid first name`
+		},
 	},
 	last_name: {
 		type: String,
 		required: true,
+		minlength: 5,
+		validate: {
+			validator: function (v) {
+				return /[a-zA-Z]+/.test(v);
+			},
+			message: props => `${props.value} is not a valid last name`
+		},
 	},
 	email: {
 		type: String,
 		required: true,
+		validate: {
+			validator: function (v) {
+				return /^[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+/.test(v);
+			},
+			message: props => `${props.value} is not a valid email`
+		},
 	},
 	password: {
 		type: String,
 		required: true,
+		minlength: 4,
 	},
 	posts: {
 		type: [mongoose.Types.ObjectId],

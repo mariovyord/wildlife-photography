@@ -56,7 +56,7 @@ router.post('/edit/:id', isUser(), async (req, res) => {
 });
 
 // DELETE POST IF OWNER
-router.get('/delete/:id', async (req, res) => {
+router.get('/delete/:id', isUser(), async (req, res) => {
 	try {
 		const post = await getPostById(req.params.id);
 
