@@ -6,7 +6,7 @@ const router = require('express').Router();
 
 // LOGIN
 router.get('/login', isGuest(), (req, res) => {
-	res.render('login');
+	res.render('login', { title: 'Login' });
 });
 
 router.post('/login', isGuest(), async (req, res) => {
@@ -15,13 +15,13 @@ router.post('/login', isGuest(), async (req, res) => {
 		res.redirect('/');
 	} catch (err) {
 		const errors = mapErrors(err);
-		res.render('login', { errors });
+		res.render('login', { errors, title: 'Login' });
 	}
 });
 
 // REGISTER
 router.get('/register', isGuest(), (req, res) => {
-	res.render('register');
+	res.render('register', { title: 'Register' });
 });
 
 router.post('/register', isGuest(), async (req, res) => {
@@ -38,7 +38,7 @@ router.post('/register', isGuest(), async (req, res) => {
 	} catch (err) {
 		const errors = mapErrors(err);
 		console.log(errors)
-		res.render('register', { errors });
+		res.render('register', { errors, title: 'Register' });
 	}
 })
 
