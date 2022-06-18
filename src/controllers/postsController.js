@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { mapErrors } = require('../utils/mapErrors');
 const { isUser } = require('../middleware/guardsMiddleware');
-const { createPost, getAllPosts, getPostById } = require('../services/postService');
+const { createPost, getAllPosts, getPostById, editPostById, deletePostById } = require('../services/postsService');
 
 // ALL POSTS PAGE
 router.get('/', async (req, res) => {
@@ -29,6 +29,45 @@ router.post('/create', isUser(), async (req, res) => {
 	}
 });
 
+router.get('/edit/:id', isUser(), async (req, res) => {
+	try {
+		const post = await getPostById(req.params.id);
+
+		if (req.session.user._id != post.author._id) {
+			throw new Error('Only owners can edit post');
+		}
+
+		res.render('edit', { post, title: `Edit: ${post.title}` })
+	} catch (err) {
+		const errors = mapErrors(err);
+		res.render('404', { errors })
+	}
+});
+
+router.post('/edit/:id', isUser(), async (req, res) => {
+	try {
+		await editPostById(req.params.id, req.body, req.session.user._id);
+		res.redirect('/posts/details/' + req.params.id);
+	} catch (err) {
+		const errors = mapErrors(err);
+		res.render('404', { errors })
+	}
+});
+
+router.get('/delete/:id', async (req, res) => {
+	try {
+		const post = await getPostById(req.params.id);
+		if (req.session.user._id != post.author._id) {
+			throw new Error('Only owners can delete posts')
+		}
+		await deletePostById(req.params.id);
+		res.redirect('/posts');
+	} catch (err) {
+		const errors = mapErrors(err);
+		res.render('404', { errors })
+	}
+});
+
 router.get('/details/:id', async (req, res) => {
 	try {
 		const post = await getPostById(req.params.id);
@@ -37,6 +76,6 @@ router.get('/details/:id', async (req, res) => {
 		const errors = mapErrors(err);
 		res.render('404', { errors })
 	}
-})
+});
 
 module.exports = router;
