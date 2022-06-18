@@ -18,3 +18,7 @@ exports.createPost = async (data, authorId) => {
 exports.getAllPosts = async () => {
 	return Post.find({}).lean();
 }
+
+exports.getPostById = async (id) => {
+	return Post.findById(id).populate('author').lean();
+}
