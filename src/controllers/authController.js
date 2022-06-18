@@ -26,7 +26,7 @@ router.get('/register', isGuest(), (req, res) => {
 
 router.post('/register', isGuest(), async (req, res) => {
 	try {
-		if (req.body.password.trim() != '') {
+		if (req.body.password.trim() == '') {
 			throw new Error(`Password can't be empty`)
 		}
 		if (req.body.password != req.body['repeat_password']) {
@@ -37,6 +37,7 @@ router.post('/register', isGuest(), async (req, res) => {
 		res.redirect('/');
 	} catch (err) {
 		const errors = mapErrors(err);
+		console.log(errors)
 		res.render('register', { errors });
 	}
 })

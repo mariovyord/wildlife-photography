@@ -7,6 +7,8 @@ exports.mapErrors = (err) => {
 		return Object.values(err.errors).map(e => ({ message: e.message }));
 	} else if (typeof err === 'string') {
 		return [{ message: err.message }];
+	} else if (err.message) {
+		return [{ message: err.message }]
 	} else {
 		return [{ message: 'Request error' }]
 	}
