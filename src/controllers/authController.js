@@ -26,7 +26,10 @@ router.get('/register', isGuest(), (req, res) => {
 
 router.post('/register', isGuest(), async (req, res) => {
 	try {
-		if (req.body.password != req.body['re-password']) {
+		if (req.body.password.trim() != '') {
+			throw new Error(`Password can't be empty`)
+		}
+		if (req.body.password != req.body['repeat_password']) {
 			throw new Error('Passwords should match')
 		}
 

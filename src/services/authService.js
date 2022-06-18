@@ -1,7 +1,7 @@
 const User = require('../models/User');
 
 exports.login = async (userData, session) => {
-	const currentUser = await User.findOne({ username: userData.username });
+	const currentUser = await User.findOne({ email: userData.email.trim() });
 
 	if (!currentUser) {
 		throw new Error('Incorect username or password')
@@ -12,10 +12,11 @@ exports.login = async (userData, session) => {
 	if (isValid) {
 		session.user = {
 			_id: currentUser._id,
-			fullName: currentUser.fullName,
-			username: currentUser.username,
+			email: currentUser.email,
+			firstName: currentUser.first_name,
+			lastName: currentUser.last_name,
 		}
-		console.log('Sign up successful');
+		console.log('Sign in successful');
 	} else {
 		throw new Error('Invalid username or password')
 	}
@@ -23,16 +24,18 @@ exports.login = async (userData, session) => {
 
 exports.register = async (userData, session) => {
 	const user = new User({
-		fullName: userData.name,
-		username: userData.username,
-		password: userData.password,
+		email: userData.email.trim(),
+		first_name: userData.first_name.trim(),
+		last_name: userData.last_name.trim(),
+		password: userData.password.trim(),
 	});
 	await user.save();
 
 	session.user = {
 		_id: user._id,
-		fullName: user.fullName,
-		username: user.username,
+		email: user.email,
+		firstName: user.first_name,
+		lastName: user.last_name,
 	}
 	console.log('Sign up successful');
 }

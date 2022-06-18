@@ -2,20 +2,26 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-	fullName: {
+	first_name: {
 		type: String,
 		required: true,
-		validate: /^[A-Z]([a-z])+ [A-Z]([a-z])+$/
 	},
-	username: {
+	last_name: {
 		type: String,
 		required: true,
-		minlength: [5, 'Username should be atleast 5 characters long']
+	},
+	email: {
+		type: String,
+		required: true,
 	},
 	password: {
 		type: String,
 		required: true,
-		minlength: [4, 'Username should be atleast 4 characters long']
+	},
+	posts: {
+		type: [mongoose.Types.ObjectId],
+		ref: 'Post',
+		default: [],
 	}
 })
 
