@@ -15,17 +15,30 @@
 				<p class="disc">Description: {{post.description}}</p>
 
 				<!-- If there is no registered user, do not display buttons-->
+				{{#if hasUser}}
 				<div class="social-btn">
+					{{#if isOwner}}
 					<!-- Only for registered user and author of the post -->
 					<a href="/posts/edit/{{post._id}}" class="edit-btn">Edit</a>
 					<a href="/posts/delete/{{post._id}}" class="del-btn">Delete</a>
-					<!-- logged in users, who have not yet voted-->
-					<a href="/posts/vote-up/{{post._id}}" class="vote-up">UpVote +1</a>
-					<a href="/posts/vote-down/{{post._id}}" class="vote-down">DownVote -1</a>
+
+					{{else}}
+
+					{{#if hasVoted}}
+
 					<!-- logged in user who has already voted-->
 					<p class="thanks-for-vote">Thanks For Voting</p>
 
+					{{else}}
+					<!-- logged in users, who have not yet voted-->
+					<a href="/posts/vote-up/{{post._id}}" class="vote-up">UpVote +1</a>
+					<a href="/posts/vote-down/{{post._id}}" class="vote-down">DownVote -1</a>
+
+					{{/if}}
+
+					{{/if}}
 				</div>
+				{{/if}}
 			</div>
 		</div>
 		<div class="card_right">
