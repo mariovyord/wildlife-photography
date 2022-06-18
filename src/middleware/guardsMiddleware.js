@@ -1,4 +1,4 @@
-module.isUser = () => (req, res, next) => {
+exports.isUser = () => (req, res, next) => {
 	if (req.session.user) {
 		next();
 	} else {
@@ -6,7 +6,7 @@ module.isUser = () => (req, res, next) => {
 	}
 }
 
-module.isGuest = () => (req, res, next) => {
+exports.isGuest = () => (req, res, next) => {
 	if (req.session.user) {
 		res.redirect('/');
 	} else {

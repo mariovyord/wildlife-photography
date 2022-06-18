@@ -4,11 +4,13 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 const port = 3000;
+const connectionString = 'mongodb://localhost:27017/wildlife-photo';
+
 
 (async function start() {
 	const app = express();
 
-	await require('./src/config/database')();
+	await require('./src/config/database')(connectionString);
 	require('./src/config/handlebars')(app);
 
 	app.use(express.urlencoded({ extended: true }));
