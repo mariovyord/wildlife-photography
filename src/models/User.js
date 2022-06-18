@@ -29,6 +29,10 @@ userSchema.methods.comparePassword = async function (password) {
 	return bcrypt.compare(password, this.password);
 }
 
+userSchema.virtual('full_name').get(function () {
+	return `${this.first_name} ${this.last_name}`;
+})
+
 userSchema.pre('save', async function (next) {
 	if (this.isModified('password')) {
 		this.password = await bcrypt.hash(this.password, 10);
