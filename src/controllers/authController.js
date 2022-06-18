@@ -15,7 +15,8 @@ router.post('/login', isGuest(), async (req, res) => {
 		res.redirect('/');
 	} catch (err) {
 		const errors = mapErrors(err);
-		res.render('login', { errors, title: 'Login' });
+		const values = req.body;
+		res.render('login', { errors, title: 'Login', values });
 	}
 });
 
@@ -37,8 +38,8 @@ router.post('/register', isGuest(), async (req, res) => {
 		res.redirect('/');
 	} catch (err) {
 		const errors = mapErrors(err);
-		console.log(errors)
-		res.render('register', { errors, title: 'Register' });
+		const values = req.body;
+		res.render('register', { errors, title: 'Register', values });
 	}
 })
 
