@@ -1,11 +1,17 @@
 const router = require('express').Router();
 const { mapErrors } = require('../utils/mapErrors');
 const { isUser } = require('../middleware/guardsMiddleware');
-const { createPost } = require('../services/postService');
+const { createPost, getAllPosts } = require('../services/postService');
 
 // ALL POSTS PAGE
-router.get('/', (req, res) => {
-	res.render('all-posts', { title: 'All Posts' })
+router.get('/', async (req, res) => {
+	try {
+		const posts = await getAllPosts();
+		res.render('all-posts', { posts, title: 'All Posts' });
+	} catch (err) {
+		const errors = mapErrors(err);
+		res.render('404', { errors })
+	}
 })
 
 

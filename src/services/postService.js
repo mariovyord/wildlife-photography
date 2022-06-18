@@ -1,4 +1,4 @@
-const User = require('../models/User');
+// const User = require('../models/User');
 const Post = require('../models/Post');
 
 exports.createPost = async (data, authorId) => {
@@ -13,4 +13,8 @@ exports.createPost = async (data, authorId) => {
 	});
 
 	return post.save();
+}
+
+exports.getAllPosts = async () => {
+	return Post.find({}).lean();
 }
