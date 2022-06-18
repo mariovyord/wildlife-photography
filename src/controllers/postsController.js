@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { mapErrors } = require('../utils/mapErrors');
 const { isUser } = require('../middleware/guardsMiddleware');
-const { createPost, getAllPosts, getPostById, editPostById, deletePostById } = require('../services/postsService');
+const { createPost, getAllPosts, getPostById, editPostById, deletePostById, upvote, downvote } = require('../services/postsService');
 
 // ALL POSTS PAGE
 router.get('/', async (req, res) => {
@@ -29,6 +29,7 @@ router.post('/create', isUser(), async (req, res) => {
 	}
 });
 
+// EDIT POST IF OWNER
 router.get('/edit/:id', isUser(), async (req, res) => {
 	try {
 		const post = await getPostById(req.params.id);
@@ -54,6 +55,7 @@ router.post('/edit/:id', isUser(), async (req, res) => {
 	}
 });
 
+// DELETE POST IF OWNER
 router.get('/delete/:id', async (req, res) => {
 	try {
 		const post = await getPostById(req.params.id);
@@ -70,19 +72,43 @@ router.get('/delete/:id', async (req, res) => {
 	}
 });
 
+// SHOW POST DETAILS
 router.get('/details/:id', async (req, res) => {
 	try {
 		const post = await getPostById(req.params.id);
+		const userId = req.session?.user?._id;
 
 		if (req.session?.user?._id == post.author._id) {
 			res.locals.isOwner = true;
 		}
 
-		if (post.votes.includes(res.session?.user?._id)) {
+		const votesToString = post.votes.map(x => x._id.toString())
+		if (votesToString.includes(userId)) {
 			res.locals.hasVoted = true;
 		}
-
+		post.votes = post.votes.map(x => `${x.first_name} ${x.last_name}`);
 		res.render('details', { title: post.title, post })
+	} catch (err) {
+		const errors = mapErrors(err);
+		res.render('404', { errors })
+	}
+});
+
+// VOTE 
+router.get('/vote-up/:id', isUser(), async (req, res) => {
+	try {
+		await upvote(req.params.id, req.session.user._id);
+		res.redirect('/posts/details/' + req.params.id);
+	} catch (err) {
+		const errors = mapErrors(err);
+		res.render('404', { errors })
+	}
+});
+
+router.get('/vote-down/:id', isUser(), async (req, res) => {
+	try {
+		await downvote(req.params.id, req.session.user._id);
+		res.redirect('/posts/details/' + req.params.id);
 	} catch (err) {
 		const errors = mapErrors(err);
 		res.render('404', { errors })

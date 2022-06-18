@@ -60,7 +60,7 @@
 				<!-- If there are already people who have cast their vote for the post, separate their emails with a comma and a space ", " -->
 
 				{{#if post.votes}}
-				<p class="disc">People who voted for the post - {{#each votes}}{{first_name}}{{/each}}</p>
+				<p class="disc">People who voted for the post - {{post.votes}}</p>
 				{{else}}
 				<!-- If not display: -->
 				<p class="disc">People who voted for the post - No one has voted yet.</p>

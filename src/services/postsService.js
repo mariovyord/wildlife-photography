@@ -43,3 +43,23 @@ exports.editPostById = async (id, data, userId) => {
 exports.deletePostById = async (id) => {
 	return Post.findByIdAndDelete(id);
 }
+
+exports.upvote = async (id, userId) => {
+	const post = await Post.findById(id);
+	if (post.votes.includes(userId)) {
+		throw new Error('User has already voted');
+	}
+	post.rating = post.rating + 1;
+	post.votes.push(userId);
+	post.save();
+}
+
+exports.downvote = async (id, userId) => {
+	const post = await Post.findById(id);
+	if (post.votes.includes(userId)) {
+		throw new Error('User has already voted');
+	}
+	post.rating = post.rating - 1;
+	post.votes.push(userId);
+	post.save();
+}
