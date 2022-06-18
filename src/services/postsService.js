@@ -23,6 +23,10 @@ exports.getPostById = async (id) => {
 	return Post.findById(id).populate('author').populate('votes').lean();
 }
 
+exports.getPostsByUserId = async (userId) => {
+	return Post.find({ author: userId }).populate('author').lean();
+}
+
 exports.editPostById = async (id, data, userId) => {
 	const post = await Post.findById(id);
 

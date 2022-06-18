@@ -36,7 +36,7 @@
 				{{#if hasUser}}
 				<!-- Logged users -->
 				<li><a href="/posts/create">Create Post</a></li>
-				<li><a href="/posts/user/:id">Posts of {{user.email}}</a></li>
+				<li><a href="/posts/user/{{user._id}}">Posts of {{user.email}}</a></li>
 				<li><a href="/auth/logout">Logout</a></li>
 				{{else}}
 				<!-- Guest users -->
