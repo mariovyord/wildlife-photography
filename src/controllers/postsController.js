@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { mapErrors } = require('../utils/mapErrors');
 const { isUser } = require('../middleware/guardsMiddleware');
-const { createPost, getAllPosts, getPostById, editPostById, deletePostById, upvote, downvote } = require('../services/postsService');
+const { createPost, getAllPosts, getPostById, editPostById, deletePostById, upvote, downvote, getPostsByUserId } = require('../services/postsService');
 
 // ALL POSTS PAGE
 router.get('/', async (req, res) => {
@@ -11,6 +11,18 @@ router.get('/', async (req, res) => {
 	} catch (err) {
 		const errors = mapErrors(err);
 		res.render('404', { errors })
+	}
+})
+
+router.get('/user/:id', isUser(), async (req, res) => {
+	console.log('here')
+	try {
+		const posts = await getPostsByUserId(req.params.id);
+		res.render('my-posts', { title: 'My posts', posts })
+	} catch (err) {
+		const errors = mapErrors(err);
+		console.log('errors', err)
+		res.render('404', { errors, title: '404' });
 	}
 })
 
